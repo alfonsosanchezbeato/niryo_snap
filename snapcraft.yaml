@@ -11,7 +11,32 @@ apps:
     command: roslaunch niryo_one_bringup rpi_setup.launch
 
 parts:
+  libwiringpi:
+    plugin: nil
+    source: git://git.drogon.net/wiringPi
+    source-type: git
+    build-packages:
+      - build-essential
+    override-build: |
+      mkdir -p "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      mkdir -p "$SNAPCRAFT_PART_INSTALL"/usr/include
+
+      cd wiringPi
+      make
+      cp libwiringPi.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cp *.h "$SNAPCRAFT_PART_INSTALL"/usr/include
+
+      cd ../devLib
+      make INCLUDE='-I. -I../wiringPi'
+      cp libwiringPiDev.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cp *.h "$SNAPCRAFT_PART_INSTALL"/usr/include
+
+      cd "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      ln -s libwiringPi.so.2.50 libwiringPi.so
+      ln -s libwiringPiDev.so.2.50 libwiringPiDev.so
+
   ros:
+    after: [ libwiringpi ]
     plugin: catkin
     override-pull: |
       set -x
@@ -51,30 +76,6 @@ parts:
       - niryo_one_rpi
       - niryo_one_tools
       - niryo_one_user_interface
-
-  libwiringpi:
-    plugin: nil
-    source: git://git.drogon.net/wiringPi
-    source-type: git
-    build-packages:
-      - build-essential
-    override-build: |
-      mkdir -p "$SNAPCRAFT_PART_INSTALL"/usr/lib
-      mkdir -p "$SNAPCRAFT_PART_INSTALL"/usr/include
-
-      cd wiringPi
-      make
-      cp libwiringPi.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
-      cp *.h "$SNAPCRAFT_PART_INSTALL"/usr/include
-
-      cd ../devLib
-      make INCLUDE='-I. -I../wiringPi'
-      cp libwiringPiDev.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
-      cp *.h "$SNAPCRAFT_PART_INSTALL"/usr/include
-
-      cd "$SNAPCRAFT_PART_INSTALL"/usr/lib
-      ln -s libwiringPi.so.2.50 libwiringPi.so
-      ln -s libwiringPiDev.so.2.50 libwiringPiDev.so
 
   # There are plenty of configuration files in the niryo sources, just
   # copy all of them for the moment.
