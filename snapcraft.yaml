@@ -60,12 +60,18 @@ parts:
       - build-essential
     override-build: |
       mkdir -p "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      mkdir -p "$SNAPCRAFT_PART_INSTALL"/usr/include
+
       cd wiringPi
       make
       cp libwiringPi.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cp *.h "$SNAPCRAFT_PART_INSTALL"/usr/include
+
       cd ../devLib
       make INCLUDE='-I. -I../wiringPi'
       cp libwiringPiDev.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cp *.h "$SNAPCRAFT_PART_INSTALL"/usr/include
+
       cd "$SNAPCRAFT_PART_INSTALL"/usr/lib
       ln -s libwiringPi.so.2.50 libwiringPi.so
       ln -s libwiringPiDev.so.2.50 libwiringPiDev.so
