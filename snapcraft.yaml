@@ -1,0 +1,84 @@
+name: niryo-one-demo1
+version: "0.1"
+summary: Demo 1 for Niryo one robot
+description: |
+  Demo 1 for Niryo one robot
+grade: devel
+confinement: devmode
+
+apps:
+  run:
+    command: roslaunch niryo_one_bringup rpi_setup.launch
+
+parts:
+  ros:
+    plugin: catkin
+    override-pull: |
+      set -x
+      cd ../../../src
+      rm -rf src
+      git clone https://github.com/NiryoRobotics/niryo_one_ros.git src
+      find -type f |
+          while read -r fname; do
+              sed -i "s#/home/niryo/#/snap/$SNAPCRAFT_PROJECT_NAME/x1/config/#" $fname
+          done
+      sed -i "s#/dev/serial0#/dev/ttyS0#" src/niryo_one_bringup/config/niryo_one_driver.yaml
+      sed -i "s#/dev/serial0#/dev/ttyS0#" src/niryo_one_debug/src/dxl_debug.cpp
+      snapcraftctl pull
+    source: src
+    rosdistro: kinetic
+    stage-packages:
+      - ros-kinetic-robot-state-publisher
+      - ros-kinetic-moveit
+      - ros-kinetic-rosbridge-suite
+      - ros-kinetic-joy
+      - ros-kinetic-ros-control
+      - ros-kinetic-ros-controllers
+      - ros-kinetic-tf2-web-republisher
+    catkin-packages:
+      - dynamixel_sdk
+      - mcp_can_rpi
+      - niryo_one
+      - niryo_one_bringup
+      - niryo_one_commander
+      - niryo_one_debug
+      - niryo_one_description
+      - niryo_one_driver
+      - niryo_one_modbus
+      - niryo_one_moveit_config
+      - niryo_one_msgs
+      - niryo_one_python_api
+      - niryo_one_rpi
+      - niryo_one_tools
+      - niryo_one_user_interface
+
+  libwiringpi:
+    plugin: nil
+    source: git://git.drogon.net/wiringPi
+    source-type: git
+    build-packages:
+      - build-essential
+    override-build: |
+      mkdir -p "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cd wiringPi
+      make
+      cp libwiringPi.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cd ../devLib
+      make INCLUDE='-I. -I../wiringPi'
+      cp libwiringPiDev.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cd "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      ln -s libwiringPi.so.2.50 libwiringPi.so
+      ln -s libwiringPiDev.so.2.50 libwiringPiDev.so
+
+  # There are plenty of configuration files in the niryo sources, just
+  # copy all of them for the moment.
+  data-files:
+    after: [ ros ]
+    plugin: dump
+    source: src
+    organize:
+      src: opt/ros/kinetic/share
+
+  dump:
+    plugin: dump
+    source: dump

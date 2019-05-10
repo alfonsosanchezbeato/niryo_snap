@@ -1,0 +1,26 @@
+---ID---
+0
+---NAME---
+Last executed command
+---CREATED---
+1543482583
+---UPDATED---
+1543482583
+---DESCRIPTION---
+
+---END_OF_DESCRIPTION---
+---BLOCKLY_XML---
+<xml xmlns="http://www.w3.org/1999/xhtml"><block type="niryo_one_move_joints" id="fa#1v!;4P)^qabZNMc=r" x="170" y="70"><field name="JOINTS_1">0</field><field name="JOINTS_2">0</field><field name="JOINTS_3">0</field><field name="JOINTS_4">0</field><field name="JOINTS_5">0</field><field name="JOINTS_6">0</field></block></xml>
+---END_OF_BLOCKLY_XML---
+---PYTHON_CODE---
+#!/usr/bin/env python
+
+from niryo_one_python_api.niryo_one_api import *
+import rospy
+rospy.init_node('niryo_one_generated_code_execution')
+n = NiryoOne()
+
+n.highlight_block('fa#1v!;4P)^qabZNMc=r')
+n.move_joints([0, 0, 0, 0, 0, 0])
+
+---END_OF_PYTHON_CODE---

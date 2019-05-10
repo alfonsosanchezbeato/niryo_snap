@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cp -r "$SNAP"/config/* "$SNAP_DATA"
+mkdir "$SNAP_DATA"/.ros

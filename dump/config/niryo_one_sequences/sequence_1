@@ -1,0 +1,25 @@
+---ID---
+1
+---NAME---
+Test sequence
+---CREATED---
+1536219227
+---UPDATED---
+1536219227
+---DESCRIPTION---
+A small demo showing all 6 axis moving
+---END_OF_DESCRIPTION---
+---BLOCKLY_XML---
+<xml xmlns="http://www.w3.org/1999/xhtml"><block type="niryo_one_move_joints" id="0uggfhHQ`$f8uMX:$Bfy" x="130" y="170"><field name="JOINTS_1">0</field><field name="JOINTS_2">-0.321</field><field name="JOINTS_3">-0.163</field><field name="JOINTS_4">0.029</field><field name="JOINTS_5">0.464</field><field name="JOINTS_6">-0.015</field><next><block type="niryo_one_move_joints" id="V5%%5p0ch31(RGkowZBr"><field name="JOINTS_1">0.515</field><field name="JOINTS_2">-0.836</field><field name="JOINTS_3">-0.659</field><field name="JOINTS_4">0.501</field><field name="JOINTS_5">1.493</field><field name="JOINTS_6">-0.035</field><next><block type="niryo_one_move_joints" id="V#m0$V/uoqID?%um55M!"><field name="JOINTS_1">-1.179</field><field name="JOINTS_2">-0.328</field><field name="JOINTS_3">0.507</field><field name="JOINTS_4">-1.805</field><field name="JOINTS_5">1.218</field><field name="JOINTS_6">-1.463</field><next><block type="niryo_one_move_joints" id=";*+MiPq6^~$LoV[ZMpiq"><field name="JOINTS_1">-1.179</field><field name="JOINTS_2">0.064</field><field name="JOINTS_3">-0.6960000000000001</field><field name="JOINTS_4">2.2640000000000002</field><field name="JOINTS_5">1.473</field><field name="JOINTS_6">1.832</field><next><block type="niryo_one_move_joints" id="9bV~qia%+Vw.7m8y@BG|"><field name="JOINTS_1">1.836</field><field name="JOINTS_2">-0.502</field><field name="JOINTS_3">0.97</field><field name="JOINTS_4">-2.275</field><field name="JOINTS_5">-1.227</field><field name="JOINTS_6">-1.478</field><next><block type="niryo_one_move_joints" id="%jxqTHx,_fC|F$,oWkt/"><field name="JOINTS_1">0</field><field name="JOINTS_2">0</field><field name="JOINTS_3">0</field><field name="JOINTS_4">0</field><field name="JOINTS_5">0</field><field name="JOINTS_6">0</field><next><block type="niryo_one_move_joints" id="y+TS3@gCC8LZ)[;ATPcQ"><field name="JOINTS_1">0</field><field name="JOINTS_2">0</field><field name="JOINTS_3">0</field><field name="JOINTS_4">2.209</field><field name="JOINTS_5">0.005</field><field name="JOINTS_6">-2.222</field><next><block type="niryo_one_move_joints" id="YFHd_?wR.e3u@$7m+ZK,"><field name="JOINTS_1">0</field><field name="JOINTS_2">0</field><field name="JOINTS_3">-1.345</field><field name="JOINTS_4">-0.009000000000000001</field><field name="JOINTS_5">0.009000000000000001</field><field name="JOINTS_6">-0.005</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></xml>
+---END_OF_BLOCKLY_XML---
+---PYTHON_CODE---
+n.move_joints([0, -0.321, -0.163, 0.029, 0.464, -0.015])
+n.move_joints([0.515, -0.836, -0.659, 0.501, 1.493, -0.035])
+n.move_joints([-1.179, -0.328, 0.507, -1.805, 1.218, -1.463])
+n.move_joints([-1.179, 0.064, -0.6960000000000001, 2.2640000000000002, 1.473, 1.832])
+n.move_joints([1.836, -0.502, 0.97, -2.275, -1.227, -1.478])
+n.move_joints([0, 0, 0, 0, 0, 0])
+n.move_joints([0, 0, 0, 2.209, 0.005, -2.222])
+n.move_joints([0, 0, -1.345, -0.009000000000000001, 0.009000000000000001, -0.005])
+
+---END_OF_PYTHON_CODE---
