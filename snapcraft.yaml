@@ -53,6 +53,8 @@ parts:
     source: src
     rosdistro: kinetic
     stage-packages:
+      - libblas3
+      - python-jsonpickle
       - ros-kinetic-robot-state-publisher
       - ros-kinetic-moveit
       - ros-kinetic-rosbridge-suite
@@ -60,7 +62,6 @@ parts:
       - ros-kinetic-ros-control
       - ros-kinetic-ros-controllers
       - ros-kinetic-tf2-web-republisher
-      - python-jsonpickle
     catkin-packages:
       - dynamixel_sdk
       - mcp_can_rpi
@@ -86,6 +87,16 @@ parts:
     source: src
     organize:
       src: opt/ros/kinetic/share
+    override-prime: |
+      set -x
+      pwd
+      snapcraftctl prime
+      # To fix possible bug in catking plugin
+      cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_user_interface/src/niryo_one_user_interface/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
+      cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_commander/src/niryo_one_commander/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
+      # Need to do this, due to some issue with selection right libblas (related to "alternatives")
+      ln -s libblas/libblas.so.3 "$SNAPCRAFT_PRIME"/usr/lib/libblas.so.3
+      ln -s lapack/liblapack.so.3 "$SNAPCRAFT_PRIME"/usr/lib/liblapack.so.3
 
   dump:
     plugin: dump
