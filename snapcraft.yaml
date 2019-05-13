@@ -9,6 +9,10 @@ confinement: devmode
 apps:
   run:
     command: roslaunch niryo_one_bringup rpi_setup.launch
+  display:
+    command: roslaunch niryo_one_description display.launch
+  simulation:
+    command: roslaunch niryo_one_bringup desktop_rviz_simulation.launch
 
 parts:
   libwiringpi:
@@ -43,12 +47,8 @@ parts:
       cd ../../../src
       rm -rf src
       git clone https://github.com/NiryoRobotics/niryo_one_ros.git src
-      find -type f |
-          while read -r fname; do
-              sed -i "s#/home/niryo/#/snap/$SNAPCRAFT_PROJECT_NAME/x1/config/#" $fname
-          done
-      sed -i "s#/dev/serial0#/dev/ttyS0#" src/niryo_one_bringup/config/niryo_one_driver.yaml
-      sed -i "s#/dev/serial0#/dev/ttyS0#" src/niryo_one_debug/src/dxl_debug.cpp
+      cd src
+      git am ../../patch/*patch
       snapcraftctl pull
     source: src
     rosdistro: kinetic
@@ -60,6 +60,7 @@ parts:
       - ros-kinetic-ros-control
       - ros-kinetic-ros-controllers
       - ros-kinetic-tf2-web-republisher
+      - python-jsonpickle
     catkin-packages:
       - dynamixel_sdk
       - mcp_can_rpi
