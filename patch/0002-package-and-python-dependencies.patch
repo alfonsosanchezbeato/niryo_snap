@@ -1,21 +1,24 @@
-From e67d5b1cd6af16b2fd43875851a9093acd7fefeb Mon Sep 17 00:00:00 2001
+From 973d564dacbef9c362ef6e87ef6271b006ee8ad6 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Alfonso=20S=C3=A1nchez-Beato?=
  <alfonso.sanchez-beato@canonical.com>
 Date: Mon, 13 May 2019 08:53:17 +0200
 Subject: [PATCH 2/2] package: and python dependencies
 
 ---
- niryo_one_rpi/package.xml | 1 +
- 1 file changed, 1 insertion(+)
+ niryo_one_rpi/package.xml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/niryo_one_rpi/package.xml b/niryo_one_rpi/package.xml
-index 1524adc..8891e3e 100644
+index 1524adc..558a0f3 100644
 --- a/niryo_one_rpi/package.xml
 +++ b/niryo_one_rpi/package.xml
-@@ -15,6 +15,7 @@
+@@ -15,6 +15,10 @@
    <run_depend>rospy</run_depend>
    <run_depend>std_msgs</run_depend>
    <run_depend>niryo_one_msgs</run_depend>
++  <run_depend>python-flask</run_depend>
++  <run_depend>python-pymodbus</run_depend>
++  <run_depend>python-serial</run_depend>
 +  <run_depend>python-rpi.gpio</run_depend>
    
    <export>
