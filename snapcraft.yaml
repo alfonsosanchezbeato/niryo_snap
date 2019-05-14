@@ -59,6 +59,7 @@ parts:
     rosdistro: kinetic
     stage-packages:
       - libblas3
+      - lsof
       - network-manager
       - python-jsonpickle
       - ros-kinetic-robot-state-publisher
