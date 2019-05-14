@@ -1,4 +1,9 @@
 #!/bin/sh
 
-cp -r "$SNAP"/config/* "$SNAP_DATA"
-mkdir "$SNAP_DATA"/.ros
+mkdir -p "$SNAP_DATA"/niryo_one_positions
+mkdir -p "$SNAP_DATA"/niryo_one_saved_values
+mkdir -p "$SNAP_DATA"/niryo_one_sequences
+mkdir -p "$SNAP_DATA"/niryo_one_trajectories
+mkdir -p "$SNAP_DATA"/.ros
+
+cp -rf "$SNAP"/config/* "$SNAP_DATA"
