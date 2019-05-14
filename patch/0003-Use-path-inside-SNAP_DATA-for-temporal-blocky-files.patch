@@ -1,4 +1,4 @@
-From 22535ae4452459be684fb88d56d2c03ec5c2cf6f Mon Sep 17 00:00:00 2001
+From 3ffced3fa18a7de34d5cd3bc66fc7ae253ece4f9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Alfonso=20S=C3=A1nchez-Beato?=
  <alfonso.sanchez-beato@canonical.com>
 Date: Tue, 14 May 2019 15:01:04 +0200
@@ -6,7 +6,8 @@ Subject: [PATCH 3/4] Use path inside SNAP_DATA for temporal blocky files
 
 ---
  .../sequences/blockly_code_generator.py                      | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../sequences/sequence_code_executor.py                      | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/niryo_one_user_interface/src/niryo_one_user_interface/sequences/blockly_code_generator.py b/niryo_one_user_interface/src/niryo_one_user_interface/sequences/blockly_code_generator.py
 index 9dc7e6c..100008a 100755
@@ -24,6 +25,22 @@ index 9dc7e6c..100008a 100755
          self.tcp_port = rospy.get_param("~niryo_one_blockly_tcp_port")
          self.blockly_xml_file = str(self.blockly_dir) + '/blockly_xml'
          self.blockly_python_file = str(self.blockly_dir) + '/blockly_python'
+diff --git a/niryo_one_user_interface/src/niryo_one_user_interface/sequences/sequence_code_executor.py b/niryo_one_user_interface/src/niryo_one_user_interface/sequences/sequence_code_executor.py
+index a80a6cc..1aea08c 100755
+--- a/niryo_one_user_interface/src/niryo_one_user_interface/sequences/sequence_code_executor.py
++++ b/niryo_one_user_interface/src/niryo_one_user_interface/sequences/sequence_code_executor.py
+@@ -22,7 +22,10 @@ def read_file(filename):
+ class SequenceCodeExecutor:
+ 
+     def __init__(self):
+-        self.blockly_dir = rospy.get_param("~sequence_code_to_execute_path")
++        try:
++            self.blockly_dir = os.environ['SNAP_DATA'] + '/code_to_execute'
++        except:
++            self.blockly_dir = rospy.get_param("~sequence_code_to_execute_path")
+         self.python_file = str(self.blockly_dir) + '/generated_code.py'
+         create_directory(self.blockly_dir)
+         self.process = None
 -- 
 2.17.1
 
