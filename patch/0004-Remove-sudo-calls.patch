@@ -1,0 +1,199 @@
+From de8938396e252611cc2df1fe4dc5a1eb83dba48e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alfonso=20S=C3=A1nchez-Beato?=
+ <alfonso.sanchez-beato@canonical.com>
+Date: Tue, 14 May 2019 15:43:24 +0200
+Subject: [PATCH 4/4] Remove sudo calls
+
+We will run as root. One of the issues with using sudo is that env vars
+are not kept and nmcli is not found anymore with it.
+---
+ niryo_one_driver/src/rpi_diagnostics.cpp      |  2 +-
+ .../src/utils/change_hardware_version.cpp     |  2 +-
+ .../src/niryo_one_rpi/rpi_ros_utils.py        |  8 ++---
+ .../src/niryo_one_rpi/wifi/network_manager.py | 30 +++++++++----------
+ 4 files changed, 21 insertions(+), 21 deletions(-)
+
+diff --git a/niryo_one_driver/src/rpi_diagnostics.cpp b/niryo_one_driver/src/rpi_diagnostics.cpp
+index 5a647a6..93f823a 100644
+--- a/niryo_one_driver/src/rpi_diagnostics.cpp
++++ b/niryo_one_driver/src/rpi_diagnostics.cpp
+@@ -64,7 +64,7 @@ void RpiDiagnostics::readHardwareDataLoop()
+         }
+         if (cpu_temperature > 85) {
+             ROS_ERROR("Rpi is too hot, shutdown to avoid any damage");
+-            std::system("sudo shutdown now");
++            std::system("shutdown now");
+         }
+ 
+         read_rpi_diagnostics_rate.sleep();
+diff --git a/niryo_one_driver/src/utils/change_hardware_version.cpp b/niryo_one_driver/src/utils/change_hardware_version.cpp
+index ac007d2..c3ee173 100644
+--- a/niryo_one_driver/src/utils/change_hardware_version.cpp
++++ b/niryo_one_driver/src/utils/change_hardware_version.cpp
+@@ -74,7 +74,7 @@ int change_hardware_version_and_reboot(int old_version, int new_version)
+ 
+     if (reboot) {
+         ROS_INFO("Reboot in 1 second...");
+-        std::system("sleep 1 && sudo reboot&");
++        std::system("sleep 1 && reboot&");
+     }
+ 
+     return CHANGE_HW_VERSION_OK;
+diff --git a/niryo_one_rpi/src/niryo_one_rpi/rpi_ros_utils.py b/niryo_one_rpi/src/niryo_one_rpi/rpi_ros_utils.py
+index a818e15..a7f4bd8 100755
+--- a/niryo_one_rpi/src/niryo_one_rpi/rpi_ros_utils.py
++++ b/niryo_one_rpi/src/niryo_one_rpi/rpi_ros_utils.py
+@@ -72,9 +72,9 @@ def send_shutdown_command():
+         activate_learning_mode(1)
+     except rospy.ServiceException, e:
+         pass
+-    rospy.loginfo("Command 'sudo shutdown now'")
++    rospy.loginfo("Command 'shutdown now'")
+     try: 
+-        output = subprocess.check_output(['sudo', 'shutdown', 'now'])
++        output = subprocess.check_output(['shutdown', 'now'])
+     except subprocess.CalledProcessError:
+         rospy.loginfo("Can't exec shutdown cmd")
+ 
+@@ -91,9 +91,9 @@ def send_reboot_command():
+         activate_learning_mode(1)
+     except rospy.ServiceException, e:
+         pass
+-    rospy.loginfo("Command 'sudo reboot'")
++    rospy.loginfo("Command 'reboot'")
+     try: 
+-        output = subprocess.check_output(['sudo', 'reboot'])
++        output = subprocess.check_output(['reboot'])
+     except subprocess.CalledProcessError:
+         rospy.loginfo("Can't exec reboot cmd")
+ 
+diff --git a/niryo_one_rpi/src/niryo_one_rpi/wifi/network_manager.py b/niryo_one_rpi/src/niryo_one_rpi/wifi/network_manager.py
+index f4efe68..13eb49c 100755
+--- a/niryo_one_rpi/src/niryo_one_rpi/wifi/network_manager.py
++++ b/niryo_one_rpi/src/niryo_one_rpi/wifi/network_manager.py
+@@ -38,7 +38,7 @@ def deactivate_current_wlan0():
+     while count < 4:
+         try:
+             output = subprocess.check_output([
+-                'sudo', 'nmcli', 'device', 'disconnect', 'wlan0'])
++                'nmcli', 'device', 'disconnect', 'wlan0'])
+             print "Successfully deactivated"
+             time.sleep(5) # needed delay
+             return True
+@@ -53,13 +53,13 @@ def activate_current_wlan0():
+     """Activate the wlan0 interface"""
+     print "Activate current wlan0"
+     output = subprocess.check_output([
+-        'sudo', 'nmcli', 'device', 'status'])
++        'nmcli', 'device', 'status'])
+     print output
+     count = 0
+     while count < 4:
+         try:
+             output = subprocess.check_output([
+-                'sudo', 'nmcli', 'device', 'connect', 'wlan0'])
++                'nmcli', 'device', 'connect', 'wlan0'])
+             print output
+             return True
+         except subprocess.CalledProcessError:
+@@ -76,7 +76,7 @@ def delete_connection_with_ssid(ssid):
+     if ssid in ssid_list:
+         try:
+             subprocess.check_output([
+-                'sudo', 'nmcli', 'connection', 'delete', ssid])
++                'nmcli', 'connection', 'delete', ssid])
+             print "Connection successfully deleted"
+             return True
+         except subprocess.CalledProcessError:
+@@ -94,7 +94,7 @@ def hard_enable_hotspot_with_ssid(ssid, passwd):
+     retries = 4
+     while retries > 0:
+         output1 = subprocess.check_output([
+-            'sudo', 'nmcli', 'connection', 'add',
++            'nmcli', 'connection', 'add',
+             'type', 'wifi', 'ifname', 'wlan0', 'con-name', ssid,
+             'autoconnect', 'no', 'ssid', ssid, 'ip4', '10.10.10.10/24' 
+         ])
+@@ -102,19 +102,19 @@ def hard_enable_hotspot_with_ssid(ssid, passwd):
+         print "Hotspot created with ip: 10.10.10.10" 
+ 
+         output2 = subprocess.check_output([
+-            'sudo', 'nmcli', 'connection', 'modify', ssid,
++            'nmcli', 'connection', 'modify', ssid,
+             '802-11-wireless.mode', 'ap', '802-11-wireless.band', 'bg',
+             'ipv4.method', 'shared'
+         ])
+ 
+         output3 = subprocess.check_output([
+-            'sudo', 'nmcli', 'connection', 'modify',
++            'nmcli', 'connection', 'modify',
+             ssid, 'wifi-sec.key-mgmt', 'wpa-psk',
+         ])
+         print "Security set to wpa password"
+ 
+         output4 = subprocess.check_output([
+-            'sudo', 'nmcli', 'connection', 'modify', ssid,
++            'nmcli', 'connection', 'modify', ssid,
+             'wifi-sec.psk', passwd
+         ])
+         print "Password set"
+@@ -125,7 +125,7 @@ def hard_enable_hotspot_with_ssid(ssid, passwd):
+             print "Attempt" + str(count)
+             try:
+                 output5 = subprocess.check_output([
+-                    'sudo', 'nmcli', 'connection', 'up', 'id', ssid
++                    'nmcli', 'connection', 'up', 'id', ssid
+                 ])
+                 print "Hotspot successfully activated"
+                 global HOTSPOT_MODE
+@@ -156,7 +156,7 @@ def connect_to_wifi(ssid, passwd):
+         print "Attempt number " + str(count+1)
+         try:
+             output = subprocess.check_output([
+-                'sudo', 'nmcli', 'device', 'wifi', 'connect', ssid,
++                'nmcli', 'device', 'wifi', 'connect', ssid,
+                 'password', passwd])
+             print "Connection successfully started"
+             if is_connected_to_wifi():
+@@ -174,7 +174,7 @@ def connect_to_wifi(ssid, passwd):
+ def is_connected_to_wifi():
+     """Check if the robot is already connected to a Wifi"""
+     list_enabled_connection = subprocess.Popen([
+-        'sudo', 'nmcli', 'connection', 'show', '--active'],
++        'nmcli', 'connection', 'show', '--active'],
+         stdout=subprocess.PIPE)
+     output, error = list_enabled_connection.communicate()
+     # print output
+@@ -187,7 +187,7 @@ def is_connected_to_wifi():
+ def get_current_ssid():
+     """Get the ssid of the current connection ('' if no connection)"""
+     list_enabled_connection = subprocess.Popen([
+-        'sudo', 'nmcli', 'connection', 'show', '--active'],
++        'nmcli', 'connection', 'show', '--active'],
+         stdout=subprocess.PIPE)
+     output, error = list_enabled_connection.communicate()
+     # print output
+@@ -201,7 +201,7 @@ def get_all_registered_wifi():
+     """Get a list of all registered SSID"""
+     list_ssid = []
+     list_registered_connections = subprocess.Popen([
+-        'sudo', 'nmcli', 'connection', 'show'],
++        'nmcli', 'connection', 'show'],
+         stdout=subprocess.PIPE)
+     output, error = list_registered_connections.communicate()
+     for line in output.split(os.linesep):
+@@ -220,9 +220,9 @@ def get_all_available_wifi():
+     """Get all currently available Wifi"""
+     list_available_wifi = []
+     subprocess.check_output([
+-        'sudo', 'nmcli', 'device', 'wifi', 'rescan'])
++        'nmcli', 'device', 'wifi', 'rescan'])
+     output, error = subprocess.Popen([
+-        'sudo', 'nmcli', 'device', 'wifi', 'list'],
++        'nmcli', 'device', 'wifi', 'list'],
+         stdout=subprocess.PIPE).communicate()
+     for line in output.split(os.linesep):
+         line = line[3:]
+-- 
+2.17.1
+

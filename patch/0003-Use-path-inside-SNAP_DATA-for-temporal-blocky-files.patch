@@ -1,0 +1,29 @@
+From 22535ae4452459be684fb88d56d2c03ec5c2cf6f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alfonso=20S=C3=A1nchez-Beato?=
+ <alfonso.sanchez-beato@canonical.com>
+Date: Tue, 14 May 2019 15:01:04 +0200
+Subject: [PATCH 3/4] Use path inside SNAP_DATA for temporal blocky files
+
+---
+ .../sequences/blockly_code_generator.py                      | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/niryo_one_user_interface/src/niryo_one_user_interface/sequences/blockly_code_generator.py b/niryo_one_user_interface/src/niryo_one_user_interface/sequences/blockly_code_generator.py
+index 9dc7e6c..100008a 100755
+--- a/niryo_one_user_interface/src/niryo_one_user_interface/sequences/blockly_code_generator.py
++++ b/niryo_one_user_interface/src/niryo_one_user_interface/sequences/blockly_code_generator.py
+@@ -52,7 +52,10 @@ def read_file(filename):
+ class BlocklyCodeGenerator:
+ 
+     def __init__(self):
+-        self.blockly_dir = rospy.get_param("~niryo_one_blockly_path")
++        try:
++            self.blockly_dir = os.environ['SNAP_DATA'] + '/blocky'
++        except:
++            self.blockly_dir = rospy.get_param("~niryo_one_blockly_path")
+         self.tcp_port = rospy.get_param("~niryo_one_blockly_tcp_port")
+         self.blockly_xml_file = str(self.blockly_dir) + '/blockly_xml'
+         self.blockly_python_file = str(self.blockly_dir) + '/blockly_python'
+-- 
+2.17.1
+
