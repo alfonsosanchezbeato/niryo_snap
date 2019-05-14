@@ -1,4 +1,4 @@
-From 0cdfc71c379a279fc451242d736c8bc394f586a8 Mon Sep 17 00:00:00 2001
+From 8b892bbfe5540841c557808d499d5b26bb5d9f74 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Alfonso=20S=C3=A1nchez-Beato?=
  <alfonso.sanchez-beato@canonical.com>
 Date: Mon, 13 May 2019 08:52:00 +0200
@@ -29,7 +29,7 @@ index bf7740b..cbb3350 100644
  # CAN bus
  spi_channel:        0
 diff --git a/niryo_one_bringup/launch/niryo_one_base.launch b/niryo_one_bringup/launch/niryo_one_base.launch
-index c74cc7b..f264194 100644
+index c74cc7b..a95777b 100644
 --- a/niryo_one_bringup/launch/niryo_one_base.launch
 +++ b/niryo_one_bringup/launch/niryo_one_base.launch
 @@ -35,7 +35,7 @@
@@ -37,12 +37,12 @@ index c74cc7b..f264194 100644
          <param name="niryo_one_one_robot_type"  type="string" value="NIRYO_ONE" />
          <param name="image_version"             type="string" if="$(arg execute_on_niryo_one_raspberry_pi_image)"
 -            textfile="/home/niryo/niryo_one_saved_values/niryo_one_image_version_do_not_edit.txt" />
-+            textfile="/snap/niryo-one-demo1/x1/config/niryo_one_saved_values/niryo_one_image_version_do_not_edit.txt" />
++            textfile="/snap/niryo-one-demo1/current/config/niryo_one_saved_values/niryo_one_image_version_do_not_edit.txt" />
      </group>
          
      <group ns="niryo_one/robot_state">
 diff --git a/niryo_one_bringup/launch/robot_commander.launch b/niryo_one_bringup/launch/robot_commander.launch
-index 42c5759..41694a7 100644
+index 42c5759..1127971 100644
 --- a/niryo_one_bringup/launch/robot_commander.launch
 +++ b/niryo_one_bringup/launch/robot_commander.launch
 @@ -23,9 +23,9 @@
@@ -50,15 +50,15 @@ index 42c5759..41694a7 100644
          <param name="goal_position_tolerance"    type="double" value="0.0001" />
          <param name="goal_orientation_tolerance" type="double" value="0.001" />
 -        <param name="positions_dir" type="string"  value="/home/niryo/niryo_one_positions" unless="$(arg simulation_mode)"/>
-+        <param name="positions_dir" type="string"  value="/snap/niryo-one-demo1/x1/config/niryo_one_positions" unless="$(arg simulation_mode)"/>
++        <param name="positions_dir" type="string"  value="/snap/niryo-one-demo1/current/config/niryo_one_positions" unless="$(arg simulation_mode)"/>
          <param name="positions_dir" type="string"  value="~/niryo_one_positions"           if="$(arg simulation_mode)"/>
 -        <param name="trajectories_dir" type="string"  value="/home/niryo/niryo_one_trajectories" unless="$(arg simulation_mode)"/>
-+        <param name="trajectories_dir" type="string"  value="/snap/niryo-one-demo1/x1/config/niryo_one_trajectories" unless="$(arg simulation_mode)"/>
++        <param name="trajectories_dir" type="string"  value="/snap/niryo-one-demo1/current/config/niryo_one_trajectories" unless="$(arg simulation_mode)"/>
          <param name="trajectories_dir" type="string"  value="~/niryo_one_trajectories"           if="$(arg simulation_mode)"/>
  
      </node>
 diff --git a/niryo_one_bringup/launch/rpi_setup.launch b/niryo_one_bringup/launch/rpi_setup.launch
-index 8c08af7..af29393 100644
+index 8c08af7..47d6f59 100644
 --- a/niryo_one_bringup/launch/rpi_setup.launch
 +++ b/niryo_one_bringup/launch/rpi_setup.launch
 @@ -20,7 +20,7 @@
@@ -66,7 +66,7 @@ index 8c08af7..af29393 100644
          <param name="hotspot_ssid"          type="string"  value="Niryo_One" />
          <param name="hotspot_password"      type="string"  value="niryoone" />
 -        <param name="filename_robot_name"   type="string"  value="/home/niryo/niryo_one_saved_values/robot_name_for_user.txt" />
-+        <param name="filename_robot_name"   type="string"  value="/snap/niryo-one-demo1/x1/config/niryo_one_saved_values/robot_name_for_user.txt" />
++        <param name="filename_robot_name"   type="string"  value="/snap/niryo-one-demo1/current/config/niryo_one_saved_values/robot_name_for_user.txt" />
          <rosparam file="$(find niryo_one_bringup)/config/rpi_ros_processes.yaml" />
          
          <param name="publish_io_state_frequency" type="double" value="10.0" />
@@ -75,15 +75,15 @@ index 8c08af7..af29393 100644
          <param name="ros_log_size_treshold" type="int"    value="1024" /> <!-- 1024 MB -->
          <param name="should_purge_ros_log_on_startup_file" type="string" 
 -            value="/home/niryo/niryo_one_saved_values/purge_ros_log_at_startup.txt" />
-+            value="/snap/niryo-one-demo1/x1/config/niryo_one_saved_values/purge_ros_log_at_startup.txt" />
++            value="/snap/niryo-one-demo1/current/config/niryo_one_saved_values/purge_ros_log_at_startup.txt" />
  
          <!-- don't change that unless you manually change ros log location --> 
 -        <param name="ros_log_location"      type="string" value="/home/niryo/.ros/log" /> 
-+        <param name="ros_log_location"      type="string" value="/snap/niryo-one-demo1/x1/config/.ros/log" /> 
++        <param name="ros_log_location"      type="string" value="/snap/niryo-one-demo1/current/config/.ros/log" />
      </node>
  </launch>
 diff --git a/niryo_one_bringup/launch/user_interface.launch b/niryo_one_bringup/launch/user_interface.launch
-index a3b4b9a..92bbd82 100644
+index a3b4b9a..47ab9d9 100644
 --- a/niryo_one_bringup/launch/user_interface.launch
 +++ b/niryo_one_bringup/launch/user_interface.launch
 @@ -17,11 +17,11 @@
@@ -91,12 +91,12 @@ index a3b4b9a..92bbd82 100644
          <param name="sequence_code_to_execute_path" type="string" value="$(find niryo_one_user_interface)/tmp_code_to_execute" /> 
          
 -        <param name="sequences_dir" type="string"  value="/home/niryo/niryo_one_sequences" unless="$(arg simulation_mode)"/>
-+        <param name="sequences_dir" type="string"  value="/snap/niryo-one-demo1/x1/config/niryo_one_sequences" unless="$(arg simulation_mode)"/>
++        <param name="sequences_dir" type="string"  value="/snap/niryo-one-demo1/current/config/niryo_one_sequences" unless="$(arg simulation_mode)"/>
          <param name="sequences_dir" type="string"  value="~/niryo_one_sequences"           if="$(arg simulation_mode)"/>
  
          <param name="sequence_autorun_status_file" type="string"
 -            value="/home/niryo/niryo_one_saved_values/sequence_autorun_status.txt" unless="$(arg simulation_mode)"/>
-+            value="/snap/niryo-one-demo1/x1/config/niryo_one_saved_values/sequence_autorun_status.txt" unless="$(arg simulation_mode)"/>
++            value="/snap/niryo-one-demo1/current/config/niryo_one_saved_values/sequence_autorun_status.txt" unless="$(arg simulation_mode)"/>
          <param name="sequence_autorun_status_file" type="string"
              value="~/sequence_autorun_status.txt" if="$(arg simulation_mode)"/>
      </node>
@@ -114,7 +114,7 @@ index 20b73f4..a56f3ea 100644
              ("scan", "Scan all Dxl motors on the bus")
              ("ping", "ping specific ID")
 diff --git a/niryo_one_driver/src/utils/motor_offset_file_handler.cpp b/niryo_one_driver/src/utils/motor_offset_file_handler.cpp
-index be36658..e024e68 100644
+index be36658..9b561f2 100644
 --- a/niryo_one_driver/src/utils/motor_offset_file_handler.cpp
 +++ b/niryo_one_driver/src/utils/motor_offset_file_handler.cpp
 @@ -26,7 +26,7 @@
@@ -122,7 +122,7 @@ index be36658..e024e68 100644
  bool get_motors_calibration_offsets(std::vector<int> &motor_id_list,  std::vector<int> &steps_list)
  {
 -    std::string file_name = "/home/niryo/niryo_one_saved_values/stepper_motor_calibration_offsets.txt"; // Todo rosparam
-+    std::string file_name = "/snap/niryo-one-demo1/x1/config/niryo_one_saved_values/stepper_motor_calibration_offsets.txt"; // Todo rosparam
++    std::string file_name = "/snap/niryo-one-demo1/current/config/niryo_one_saved_values/stepper_motor_calibration_offsets.txt"; // Todo rosparam
      std::vector<std::string> lines;
      std::string current_line;
      
@@ -131,12 +131,12 @@ index be36658..e024e68 100644
      }
  
 -    std::string file_name = "/home/niryo/niryo_one_saved_values/stepper_motor_calibration_offsets.txt"; // Todo rosparam
-+    std::string file_name = "/snap/niryo-one-demo1/x1/config/niryo_one_saved_values/stepper_motor_calibration_offsets.txt"; // Todo rosparam
++    std::string file_name = "/snap/niryo-one-demo1/current/config/niryo_one_saved_values/stepper_motor_calibration_offsets.txt"; // Todo rosparam
      size_t found = file_name.find_last_of("/");
      std::string folder_name = file_name.substr(0, found);
  
 diff --git a/niryo_one_rpi/src/niryo_one_rpi/wifi/robot_name_handler.py b/niryo_one_rpi/src/niryo_one_rpi/wifi/robot_name_handler.py
-index 63ad66a..39f86f1 100755
+index 63ad66a..83f451e 100755
 --- a/niryo_one_rpi/src/niryo_one_rpi/wifi/robot_name_handler.py
 +++ b/niryo_one_rpi/src/niryo_one_rpi/wifi/robot_name_handler.py
 @@ -26,7 +26,7 @@ import os
@@ -144,7 +144,7 @@ index 63ad66a..39f86f1 100755
  
  # default value, will be replaced with value in setup launch file
 -FILENAME = '/home/niryo/niryo_one_saved_values/robot_name.txt' 
-+FILENAME = '/snap/niryo-one-demo1/x1/config/niryo_one_saved_values/robot_name.txt' 
++FILENAME = '/snap/niryo-one-demo1/current/config/niryo_one_saved_values/robot_name.txt'
  
  def get_filename_robot_name():
      return FILENAME
