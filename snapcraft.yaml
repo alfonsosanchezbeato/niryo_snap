@@ -50,10 +50,16 @@ parts:
       cd src
       git am ../../patch/*patch
       snapcraftctl pull
+    override-build: |
+      snapcraftctl build
+      # catkin plugin not copying files?
+      cp -r devel_isolated/niryo_one_driver/lib/* ../install/opt/ros/kinetic/lib
+      cp -r devel_isolated/niryo_one_debug/lib/* ../install/opt/ros/kinetic/lib
     source: src
     rosdistro: kinetic
     stage-packages:
       - libblas3
+      - network-manager
       - python-jsonpickle
       - ros-kinetic-robot-state-publisher
       - ros-kinetic-moveit
@@ -91,12 +97,13 @@ parts:
       set -x
       pwd
       snapcraftctl prime
-      # To fix possible bug in catking plugin
+      # To fix possible bug in catkin plugin
       cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_user_interface/src/niryo_one_user_interface/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
       cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_commander/src/niryo_one_commander/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
+      cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_rpi/src/niryo_one_rpi/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
       # Need to do this, due to some issue with selection right libblas (related to "alternatives")
-      ln -s libblas/libblas.so.3 "$SNAPCRAFT_PRIME"/usr/lib/libblas.so.3
-      ln -s lapack/liblapack.so.3 "$SNAPCRAFT_PRIME"/usr/lib/liblapack.so.3
+      ln -sf libblas/libblas.so.3 "$SNAPCRAFT_PRIME"/usr/lib/libblas.so.3
+      ln -sf lapack/liblapack.so.3 "$SNAPCRAFT_PRIME"/usr/lib/liblapack.so.3
 
   dump:
     plugin: dump
