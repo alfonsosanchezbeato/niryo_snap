@@ -106,6 +106,15 @@ parts:
       ln -sf libblas/libblas.so.3 "$SNAPCRAFT_PRIME"/usr/lib/libblas.so.3
       ln -sf lapack/liblapack.so.3 "$SNAPCRAFT_PRIME"/usr/lib/liblapack.so.3
 
+  blockly-code-generator:
+    after: [ data-files ]
+    plugin: nodejs
+    source: src/src/niryo_one_user_interface/blockly_code_generator/
+    source-type: local
+    override-build: |
+      snapcraftctl build
+      mkdir -p "$SNAPCRAFT_PART_INSTALL"/bin
+
   dump:
     plugin: dump
     source: dump
