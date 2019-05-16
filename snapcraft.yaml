@@ -46,7 +46,7 @@ parts:
       set -x
       cd ../../../src
       rm -rf src
-      git clone https://github.com/NiryoRobotics/niryo_one_ros.git src
+      git clone -b 2.1.0 --depth 1 https://github.com/NiryoRobotics/niryo_one_ros.git src
       cd src
       git am ../../patch/*patch
       snapcraftctl pull
