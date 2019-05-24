@@ -9,6 +9,7 @@ confinement: devmode
 apps:
   run:
     command: roslaunch niryo_one_bringup rpi_setup.launch
+    plugs: [ network-manager ]
   display:
     command: roslaunch niryo_one_description display.launch
   simulation:
