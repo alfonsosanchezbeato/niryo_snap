@@ -7,6 +7,10 @@ grade: devel
 confinement: devmode
 
 apps:
+  service:
+    command: bin/service.sh
+    daemon: simple
+    plugs: [ network-manager ]
   run:
     command: roslaunch niryo_one_bringup rpi_setup.launch
     plugs: [ network-manager ]
