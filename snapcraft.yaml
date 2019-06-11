@@ -46,7 +46,7 @@ parts:
 
   ros:
     after: [ libwiringpi ]
-    plugin: catkin
+    plugin: catkin-niryo
     override-pull: |
       set -x
       cd ../../../src
@@ -103,7 +103,7 @@ parts:
       set -x
       pwd
       snapcraftctl prime
-      # To fix possible bug in catkin plugin
+      # To fix packaging issues in niryo ROS stack
       cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_user_interface/src/niryo_one_user_interface/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
       cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_commander/src/niryo_one_commander/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
       cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_rpi/src/niryo_one_rpi/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
