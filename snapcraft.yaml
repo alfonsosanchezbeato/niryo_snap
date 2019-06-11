@@ -57,7 +57,7 @@ parts:
       snapcraftctl pull
     override-build: |
       snapcraftctl build
-      # catkin plugin not copying files?
+      # Copy some missing binaries - they should be specified in CMakeLists.txt probably
       cp -r devel_isolated/niryo_one_driver/lib/* ../install/opt/ros/kinetic/lib
       cp -r devel_isolated/niryo_one_debug/lib/* ../install/opt/ros/kinetic/lib
     source: src
