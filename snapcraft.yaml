@@ -32,17 +32,17 @@ parts:
 
       cd wiringPi
       make
-      cp libwiringPi.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cp libwiringPi.so.* "$SNAPCRAFT_PART_INSTALL"/usr/lib
       cp *.h "$SNAPCRAFT_PART_INSTALL"/usr/include
 
       cd ../devLib
       make INCLUDE='-I. -I../wiringPi'
-      cp libwiringPiDev.so.2.50 "$SNAPCRAFT_PART_INSTALL"/usr/lib
+      cp libwiringPiDev.so.* "$SNAPCRAFT_PART_INSTALL"/usr/lib
       cp *.h "$SNAPCRAFT_PART_INSTALL"/usr/include
 
       cd "$SNAPCRAFT_PART_INSTALL"/usr/lib
-      ln -s libwiringPi.so.2.50 libwiringPi.so
-      ln -s libwiringPiDev.so.2.50 libwiringPiDev.so
+      ln -s libwiringPi.so.* libwiringPi.so
+      ln -s libwiringPiDev.* libwiringPiDev.so
 
   ros:
     after: [ libwiringpi ]
