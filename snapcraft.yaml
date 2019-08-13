@@ -22,7 +22,7 @@ apps:
 parts:
   libwiringpi:
     plugin: nil
-    source: git://git.drogon.net/wiringPi
+    source: https://github.com/WiringPi/WiringPi.git
     source-type: git
     build-packages:
       - build-essential
