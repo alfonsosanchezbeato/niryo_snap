@@ -47,7 +47,7 @@ parts:
 
   ros:
     after: [ libwiringpi ]
-    plugin: catkin-niryo
+    plugin: catkin
     override-pull: |
       set -x
       cd ../../../src
@@ -64,7 +64,6 @@ parts:
       cp -r devel_isolated/niryo_one_driver/lib/* ../install/opt/ros/kinetic/lib
       cp -r devel_isolated/niryo_one_debug/lib/* ../install/opt/ros/kinetic/lib
     source: src
-    rosdistro: kinetic
     stage-packages:
       - libblas3
       - lsof
