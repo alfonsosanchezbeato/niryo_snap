@@ -53,6 +53,8 @@ parts:
       rm -rf src
       LD_LIBRARY_PATH="" git clone -b 2.1.0 --depth 1 https://github.com/NiryoRobotics/niryo_one_ros.git src
       cd src
+      LD_LIBRARY_PATH="" git config user.email "niryo@commit.com"
+      LD_LIBRARY_PATH="" git config user.name "Nirio robot"
       LD_LIBRARY_PATH="" git am ../../patch/*patch
       snapcraftctl pull
     override-build: |
