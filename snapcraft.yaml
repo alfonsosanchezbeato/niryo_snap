@@ -4,7 +4,7 @@ summary: Demo 1 for Niryo one robot
 description: |
   Demo 1 for Niryo one robot
 grade: devel
-base: core
+base: core18
 confinement: devmode
 
 apps:
@@ -63,21 +63,21 @@ parts:
     override-build: |
       snapcraftctl build
       # Copy some missing binaries - they should be specified in CMakeLists.txt probably
-      cp -r devel_isolated/niryo_one_driver/lib/* ../install/opt/ros/kinetic/lib
-      cp -r devel_isolated/niryo_one_debug/lib/* ../install/opt/ros/kinetic/lib
+      cp -r devel_isolated/niryo_one_driver/lib/* ../install/opt/ros/melodic/lib
+      cp -r devel_isolated/niryo_one_debug/lib/* ../install/opt/ros/melodic/lib
     source: src
     stage-packages:
       - libblas3
       - lsof
       - network-manager
       - python-jsonpickle
-      - ros-kinetic-robot-state-publisher
-      - ros-kinetic-moveit
-      - ros-kinetic-rosbridge-suite
-      - ros-kinetic-joy
-      - ros-kinetic-ros-control
-      - ros-kinetic-ros-controllers
-      - ros-kinetic-tf2-web-republisher
+      - ros-melodic-robot-state-publisher
+      - ros-melodic-moveit
+      - ros-melodic-rosbridge-suite
+      - ros-melodic-joy
+      - ros-melodic-ros-control
+      - ros-melodic-ros-controllers
+      - ros-melodic-tf2-web-republisher
     catkin-packages:
       - dynamixel_sdk
       - mcp_can_rpi
@@ -102,18 +102,18 @@ parts:
     plugin: dump
     source: src
     organize:
-      src: opt/ros/kinetic/share
+      src: opt/ros/melodic/share
     override-prime: |
       set -x
       pwd
       snapcraftctl prime
       # To fix packaging issues in niryo ROS stack
-      cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_user_interface/src/niryo_one_user_interface/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
-      cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_commander/src/niryo_one_commander/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
-      cp -r "$SNAPCRAFT_PRIME"/opt/ros/kinetic/share/niryo_one_rpi/src/niryo_one_rpi/ "$SNAPCRAFT_PRIME"/opt/ros/kinetic/lib/python2.7/dist-packages/
+      cp -r "$SNAPCRAFT_PRIME"/opt/ros/melodic/share/niryo_one_user_interface/src/niryo_one_user_interface/ "$SNAPCRAFT_PRIME"/opt/ros/melodic/lib/python2.7/dist-packages/
+      cp -r "$SNAPCRAFT_PRIME"/opt/ros/melodic/share/niryo_one_commander/src/niryo_one_commander/ "$SNAPCRAFT_PRIME"/opt/ros/melodic/lib/python2.7/dist-packages/
+      cp -r "$SNAPCRAFT_PRIME"/opt/ros/melodic/share/niryo_one_rpi/src/niryo_one_rpi/ "$SNAPCRAFT_PRIME"/opt/ros/melodic/lib/python2.7/dist-packages/
       # Need to do this, due to some issue with selection right libblas (related to "alternatives")
-      ln -sf libblas/libblas.so.3 "$SNAPCRAFT_PRIME"/usr/lib/libblas.so.3
-      ln -sf lapack/liblapack.so.3 "$SNAPCRAFT_PRIME"/usr/lib/liblapack.so.3
+      ln -sf arm-linux-gnueabihf/blas/libblas.so.3 "$SNAPCRAFT_PRIME"/usr/lib/libblas.so.3
+      ln -sf arm-linux-gnueabihf/lapack/liblapack.so.3 "$SNAPCRAFT_PRIME"/usr/lib/liblapack.so.3
 
   blockly-code-generator:
     after: [ data-files ]
