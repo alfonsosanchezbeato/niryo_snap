@@ -48,6 +48,8 @@ parts:
   ros:
     after: [ libwiringpi ]
     plugin: catkin
+    build-packages:
+      - lsb-release
     override-pull: |
       set -x
       cd ../../../src
