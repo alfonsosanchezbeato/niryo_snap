@@ -4,6 +4,7 @@ summary: Demo 1 for Niryo one robot
 description: |
   Demo 1 for Niryo one robot
 grade: devel
+base: core
 confinement: devmode
 
 apps:
