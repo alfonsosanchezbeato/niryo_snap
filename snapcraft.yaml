@@ -116,6 +116,7 @@ parts:
   blockly-code-generator:
     after: [ data-files ]
     plugin: nodejs
+    nodejs-package-manager: npm
     source: src/src/niryo_one_user_interface/blockly_code_generator/
     source-type: local
     override-build: |
