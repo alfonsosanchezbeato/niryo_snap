@@ -6,6 +6,13 @@ description: |
 grade: devel
 confinement: devmode
 
+slots:
+  robot-data:
+    interface: content
+    content: sequences
+    write:
+      - $SNAP_DATA
+
 apps:
   service:
     command: bin/service.sh
