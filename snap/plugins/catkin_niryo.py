@@ -30,7 +30,8 @@ Additionally, this plugin uses the following plugin-specific keywords:
       The source space containing Catkin packages. By default this is 'src'.
     - rosdistro:
       (string)
-      The ROS distro required by this system. Defaults to 'indigo'.
+      The ROS distro required by this system. Options are 'indigo', 'jade',
+      'kinetic', or 'lunar'.
     - include-roscore:
       (boolean)
       Whether or not to include roscore with the part. Defaults to true.
@@ -92,6 +93,8 @@ _ROS_RELEASE_MAP = {
 }
 
 _SUPPORTED_DEPENDENCY_TYPES = {"apt", "pip"}
+
+_ROS_KEYRING_PATH = os.path.join(snapcraft.internal.common.get_keyringsdir(), "ros.gpg")
 
 
 class CatkinInvalidSystemDependencyError(errors.SnapcraftError):
@@ -165,11 +168,11 @@ class CatkinPackagePathNotFoundError(errors.SnapcraftError):
         super().__init__(path=path)
 
 
-class CatkinNiryoPlugin(snapcraft.BasePlugin):
+class CatkinPlugin(snapcraft.BasePlugin):
     @classmethod
     def schema(cls):
         schema = super().schema()
-        schema["properties"]["rosdistro"] = {"type": "string", "default": "indigo"}
+        schema["properties"]["rosdistro"] = {"type": "string"}
         schema["properties"]["catkin-packages"] = {
             "type": "array",
             "minitems": 1,
@@ -217,6 +220,8 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
             "type": "string",
             "default": "http://localhost:11311",
         }
+
+        schema["required"].append("rosdistro")
 
         return schema
 
@@ -271,6 +276,10 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
                 codename=_ROS_RELEASE_MAP[self.options.rosdistro],
             )
         )
+
+    @property
+    def PLUGIN_STAGE_KEYRINGS(self):
+        return [_ROS_KEYRING_PATH]
 
     def __init__(self, name, options, project):
         super().__init__(name, options, project)
@@ -404,6 +413,7 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
                 self._ros_package_path,
                 self._wstool_path,
                 self.PLUGIN_STAGE_SOURCES,
+                self.PLUGIN_STAGE_KEYRINGS,
                 self.project,
             )
             wstool.setup()
@@ -463,6 +473,7 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
                 underlay_build_path,
                 self._catkin_path,
                 self.PLUGIN_STAGE_SOURCES,
+                self.PLUGIN_STAGE_KEYRINGS,
                 self.project,
             )
             catkin.setup()
@@ -472,7 +483,10 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
         # Pull our own compilers so we use ones that match up with the version
         # of ROS we're using.
         compilers = Compilers(
-            self._compilers_path, self.PLUGIN_STAGE_SOURCES, self.project
+            self._compilers_path,
+            self.PLUGIN_STAGE_SOURCES,
+            self.PLUGIN_STAGE_KEYRINGS,
+            self.project,
         )
         compilers.setup()
 
@@ -483,6 +497,7 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
             rosdep_path=self._rosdep_path,
             ubuntu_distro=_ROS_RELEASE_MAP[self.options.rosdistro],
             ubuntu_sources=self.PLUGIN_STAGE_SOURCES,
+            ubuntu_keyrings=self.PLUGIN_STAGE_KEYRINGS,
             project=self.project,
         )
         rosdep.setup()
@@ -522,6 +537,7 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
             ubuntu = repo.Ubuntu(
                 ubuntudir,
                 sources=self.PLUGIN_STAGE_SOURCES,
+                keyrings=self.PLUGIN_STAGE_KEYRINGS,
                 project_options=self.project,
             )
 
@@ -762,8 +778,8 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
         # Install the package
         catkincmd.append("--install")
         # XXX Workaround g++ build failure on armhf
-        catkincmd.append("-j2")
-        catkincmd.append("-l2")
+        catkincmd.append("-j1")
+        catkincmd.append("-l1")
 
         if self.catkin_packages:
             # Specify the packages to be built
@@ -789,7 +805,10 @@ class CatkinNiryoPlugin(snapcraft.BasePlugin):
         # Make sure we're using our own compilers (the one on the system may
         # be the wrong version).
         compilers = Compilers(
-            self._compilers_path, self.PLUGIN_STAGE_SOURCES, self.project
+            self._compilers_path,
+            self.PLUGIN_STAGE_SOURCES,
+            self.PLUGIN_STAGE_KEYRINGS,
+            self.project,
         )
         build_type = "Release"
         if "debug" in self.options.build_attributes:
@@ -955,9 +974,10 @@ class CatkinPackageNotFoundError(errors.SnapcraftError):
 
 
 class Compilers:
-    def __init__(self, compilers_path, ubuntu_sources, project):
+    def __init__(self, compilers_path, ubuntu_sources, ubuntu_keyrings, project):
         self._compilers_path = compilers_path
         self._ubuntu_sources = ubuntu_sources
+        self._ubuntu_keyrings = ubuntu_keyrings
         self._project = project
 
         self._compilers_install_path = os.path.join(self._compilers_path, "install")
@@ -974,6 +994,7 @@ class Compilers:
         ubuntu = repo.Ubuntu(
             self._compilers_path,
             sources=self._ubuntu_sources,
+            keyrings=self._ubuntu_keyrings,
             project_options=self._project,
         )
 
@@ -1055,11 +1076,20 @@ class Compilers:
 
 
 class _Catkin:
-    def __init__(self, ros_distro, workspace, catkin_path, ubuntu_sources, project):
+    def __init__(
+        self,
+        ros_distro,
+        workspace,
+        catkin_path,
+        ubuntu_sources,
+        ubuntu_keyrings,
+        project,
+    ):
         self._ros_distro = ros_distro
         self._workspace = workspace
         self._catkin_path = catkin_path
         self._ubuntu_sources = ubuntu_sources
+        self._ubuntu_keyrings = ubuntu_keyrings
         self._project = project
         self._catkin_install_path = os.path.join(self._catkin_path, "install")
 
@@ -1072,6 +1102,7 @@ class _Catkin:
         ubuntu = repo.Ubuntu(
             self._catkin_path,
             sources=self._ubuntu_sources,
+            keyrings=self._ubuntu_keyrings,
             project_options=self._project,
         )
         logger.info("Fetching catkin...")
